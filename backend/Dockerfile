@@ -1,6 +1,7 @@
 FROM node:18-alpine
 
-WORKDIR /usr/src/app
+WORKDIR /app
+RUN apk add --no-cache openssl libc6-compat
 
 # Копируем package.json и package-lock.json
 COPY package*.json ./
