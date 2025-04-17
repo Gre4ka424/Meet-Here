@@ -1,27 +1,22 @@
 FROM node:18
 
 WORKDIR /app
+
+COPY package*.json ./
 RUN apt-get update && apt-get install -y libssl1.1 || \
     (wget http://archive.ubuntu.com/ubuntu/pool/main/o/openssl/libssl1.1_1.1.1f-1ubuntu2_amd64.deb && \
     dpkg -i libssl1.1_1.1.1f-1ubuntu2_amd64.deb)
 
-# Копируем package.json и package-lock.json
-COPY package*.json ./
+# Полностью удаляем старые модули и кэш Prisma
+RUN rm -rf node_modules
+RUN rm -rf .prisma
 
-# Устанавливаем зависимости
+# Устанавливаем зависимости заново
 RUN npm install
 
-# Копируем prisma схему
-COPY prisma ./prisma/
-
-# Генерируем Prisma клиент
-RUN npx prisma generate
-
-# Копируем исходный код
 COPY . .
 
-# Открываем порт
-EXPOSE 5000
+# Генерируем Prisma клиент для правильной платформы
+RUN npx prisma generate
 
-# Команда для запуска приложения
-CMD ["npm", "start"] 
+CMD ["npm", "start"]
