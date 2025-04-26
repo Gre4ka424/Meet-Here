@@ -8,10 +8,10 @@ import os
 from datetime import timedelta
 from pathlib import Path
 
-from database import get_db, engine
-from models import Base, UserDB
-from schemas import UserCreate, User, Token, UserLogin
-from auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
+from .database import get_db, engine
+from .models import Base, UserDB
+from .schemas import UserCreate, User, Token, UserLogin
+from .auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
 
 # Create tables
 Base.metadata.create_all(bind=engine)
