@@ -1,8 +1,8 @@
-from fastapi import FastAPI, Depends, HTTPException, status, Request
+from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse, HTMLResponse
+from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 import os
 import sys
@@ -21,7 +21,6 @@ Base.metadata.create_all(bind=engine)
 
 # Get the directory of the current file
 BASE_DIR = Path(__file__).resolve().parent.parent
-FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
 
 app = FastAPI(
     title="MeetHere API",
@@ -38,39 +37,28 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount the frontend directory
-app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
+# Serve static files
+app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "frontend", "static")), name="static")
 
-# List of SPA routes that should return index.html
-SPA_ROUTES = [
-    "/",
-    "/services",
-    "/our-work",
-    "/our-team",
-    "/price-list",
-    "/contact",
-    "/login",
-    "/register"
-]
-
+# Serve frontend files
 @app.get("/")
 async def read_root():
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+    return FileResponse(os.path.join(BASE_DIR, "frontend", "index.html"))
 
-@app.get("/{filename:path}")
-async def serve_files(filename: str):
-    # Сначала проверяем в корне frontend
-    filepath = os.path.join(FRONTEND_DIR, filename)
-    if os.path.exists(filepath):
-        return FileResponse(filepath)
+@app.get("/{path:path}")
+async def serve_static(path: str):
+    # First try to serve from frontend root
+    frontend_path = os.path.join(BASE_DIR, "frontend", path)
+    if os.path.exists(frontend_path) and os.path.isfile(frontend_path):
+        return FileResponse(frontend_path)
         
-    # Затем проверяем в static
-    static_filepath = os.path.join(FRONTEND_DIR, "static", filename)
-    if os.path.exists(static_filepath):
-        return FileResponse(static_filepath)
+    # Then try to serve from static directory
+    static_path = os.path.join(BASE_DIR, "frontend", "static", path)
+    if os.path.exists(static_path) and os.path.isfile(static_path):
+        return FileResponse(static_path)
         
-    # Если файл не найден, возвращаем index.html для SPA
-    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+    # If not found, return index.html for client-side routing
+    return FileResponse(os.path.join(BASE_DIR, "frontend", "index.html"))
 
 # API routes
 @app.post("/api/token", response_model=Token)
