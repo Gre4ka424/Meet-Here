@@ -21,12 +21,7 @@ Base.metadata.create_all(bind=engine)
 
 # Get the directory of the current file
 BASE_DIR = Path(__file__).resolve().parent.parent
-STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")
 FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
-
-# Create directories if they don't exist
-os.makedirs(STATIC_DIR, exist_ok=True)
-os.makedirs(FRONTEND_DIR, exist_ok=True)
 
 app = FastAPI(
     title="MeetHere API",
@@ -43,8 +38,8 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount static files
-app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
+# Mount the frontend directory
+app.mount("/", StaticFiles(directory=FRONTEND_DIR, html=True), name="frontend")
 
 # List of SPA routes that should return index.html
 SPA_ROUTES = [
@@ -58,26 +53,24 @@ SPA_ROUTES = [
     "/register"
 ]
 
-@app.get("/{full_path:path}")
-async def catch_all(request: Request, full_path: str):
-    # Check if it's an API route
-    if request.url.path.startswith("/api/"):
-        raise HTTPException(status_code=404, detail="API route not found")
+@app.get("/")
+async def read_root():
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
+
+@app.get("/{filename:path}")
+async def serve_files(filename: str):
+    # Сначала проверяем в корне frontend
+    filepath = os.path.join(FRONTEND_DIR, filename)
+    if os.path.exists(filepath):
+        return FileResponse(filepath)
         
-    # Check if it's a static file
-    if full_path.startswith("static/"):
-        file_path = os.path.join(BASE_DIR, full_path)
-        if os.path.exists(file_path):
-            return FileResponse(file_path)
-        raise HTTPException(status_code=404, detail="Static file not found")
-    
-    # For SPA routes or unknown paths, return index.html
-    index_path = os.path.join(FRONTEND_DIR, "index.html")
-    if os.path.exists(index_path):
-        with open(index_path, "r", encoding="utf-8") as f:
-            content = f.read()
-            return HTMLResponse(content=content)
-    return HTMLResponse(content="Welcome to MeetHere API")
+    # Затем проверяем в static
+    static_filepath = os.path.join(FRONTEND_DIR, "static", filename)
+    if os.path.exists(static_filepath):
+        return FileResponse(static_filepath)
+        
+    # Если файл не найден, возвращаем index.html для SPA
+    return FileResponse(os.path.join(FRONTEND_DIR, "index.html"))
 
 # API routes
 @app.post("/api/token", response_model=Token)
