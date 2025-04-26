@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact - MeetHere</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <div class="layout">
+        <!-- Боковая панель -->
+        <div class="sidebar">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="images/logo.png" alt="MeetHere Logo">
+                    <h1>MeetHere</h1>
+                </a>
+            </div>
+            <nav class="main-nav">
+                <ul>
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="services.html">Services</a></li>
+                    <li><a href="our-work.html">Our work</a></li>
+                    <li><a href="our-team.html">Our team</a></li>
+                    <li><a href="price-list.html">Price list</a></li>
+                    <li><a href="contact.html" class="active">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="language-switcher">
+                <div class="language-notice">
+                    <span>Οι σελίδες παρέχονται από το Paxels</span>
+                    <span>Υλοποιήθηκε από τη Webnode</span>
+                    <a href="#">Cookies</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Основной контент -->
+        <div class="main-content">
+            <!-- Заголовок страницы Contact -->
+            <div class="page-header light-bg">
+                <h1 class="section-title green">Contact</h1>
+            </div>
+
+            <!-- Информация о контактах -->
+            <div class="contact-info">
+                <!-- Блок сообщений -->
+                <div class="contact-block">
+                    <div class="contact-icon">
+                        <img src="images/icon-message.png" alt="Message us">
+                    </div>
+                    <h3 class="contact-title green">Message us</h3>
+                    <p class="contact-description">Send message</p>
+                    <p class="contact-details">fili.koumoundouros@mc-class.gr</p>
+                    <p class="contact-details">deni.gubochkin@mc-class.gr</p>
+                </div>
+
+                <!-- Блок звонков -->
+                <div class="contact-block">
+                    <div class="contact-icon">
+                        <img src="images/icon-call.png" alt="Call us">
+                    </div>
+                    <h3 class="contact-title green">Call us</h3>
+                    <p class="contact-description">Contact us</p>
+                    <p class="contact-details">6989800026</p>
+                    <p class="contact-details">6937956407</p>
+                </div>
+
+                <!-- Блок с адресом -->
+                <div class="contact-block">
+                    <div class="contact-icon">
+                        <img src="images/icon-location.png" alt="Find us">
+                    </div>
+                    <h3 class="contact-title green">Find us</h3>
+                    <p class="contact-description">Address</p>
+                    <p class="contact-details">Achilleos 33a, Glifada 166 75</p>
+                </div>
+            </div>
+
+            <!-- Разделительная линия -->
+            <div class="contact-divider"></div>
+
+            <!-- Карта и форма обратной связи -->
+            <div class="contact-map-form">
+                <!-- Карта -->
+                <div class="map-container">
+                    <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3148.1332677196374!2d23.7561!3d37.8925!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x14a1bd0f0e3b4393%3A0x9baaeb861e8e5cc0!2sAchilleos%2033a%2C%20Glifada%20166%2075%2C%20Greece!5e0!3m2!1sen!2s!4v1619455781972!5m2!1sen!2s" width="100%" height="450" style="border:0;" allowfullscreen="" loading="lazy"></iframe>
+                </div>
+
+                <!-- Форма обратной связи -->
+                <div class="contact-form">
+                    <h2 class="form-title green">EVERYTHING YOU NEED FOR YOUR CAMERA</h2>
+                    <p class="form-description">Welcome to MeetHere, the new social network that connects people!!</p>
+                    
+                    <form id="contact-form">
+                        <div class="form-group">
+                            <label for="name">Full name</label>
+                            <input type="text" id="name" name="name" required>
+                        </div>
+                        <div class="form-group">
+                            <label for="email">Email</label>
+                            <div class="email-input">
+                                <span class="email-prefix">@</span>
+                                <input type="email" id="email" name="email" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="message">Μήνυμα</label>
+                            <textarea id="message" name="message" rows="4" required></textarea>
+                        </div>
+                        <button type="submit" class="btn-primary">Submission</button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Нижняя панель с уведомлением о cookies -->
+            <div class="cookie-notice">
+                <p>Αυτή η ιστοσελίδα δημιουργήθηκε με τη Webnode. Δημιουργήστε τη δική σας δωρεάν σήμερα!</p>
+                <button class="btn-accept">Σεβαστείτε</button>
+            </div>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html> 
