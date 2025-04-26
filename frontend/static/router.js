@@ -116,7 +116,7 @@ const routes = {
                     <a href="/services" class="features-link" data-lang-key="home.allServices">${t.allServices} →</a>
                 </div>
                 <div class="features-image">
-                    <img src="https://via.placeholder.com/500x350/0000FF/FFFFFF?text=Event+Photo" alt="Event Photo">
+                    <img src="/static/icon/event.jpeg" alt="Event Photo">
                 </div>
             </section>
         `;
