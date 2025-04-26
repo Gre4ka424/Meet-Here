@@ -2,23 +2,31 @@ from fastapi import FastAPI, Depends, HTTPException, status
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
-from fastapi.responses import FileResponse
+from fastapi.responses import FileResponse, HTMLResponse
 from sqlalchemy.orm import Session
 import os
 import sys
 from datetime import timedelta
 from pathlib import Path
 
+# Add the backend directory to Python path
 sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 from backend.database import get_db, engine
 from backend.models import Base, UserDB
 from backend.schemas import UserCreate, User, Token, UserLogin
 from backend.auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
+
 # Create tables
 Base.metadata.create_all(bind=engine)
 
 # Get the directory of the current file
 BASE_DIR = Path(__file__).resolve().parent.parent
+STATIC_DIR = os.path.join(BASE_DIR, "frontend", "static")
+FRONTEND_DIR = os.path.join(BASE_DIR, "frontend")
+
+# Create directories if they don't exist
+os.makedirs(STATIC_DIR, exist_ok=True)
+os.makedirs(FRONTEND_DIR, exist_ok=True)
 
 app = FastAPI(
     title="MeetHere API",
@@ -36,19 +44,28 @@ app.add_middleware(
 )
 
 # Mount static files
-app.mount("/static", StaticFiles(directory=os.path.join(BASE_DIR, "frontend", "static")), name="static")
+app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
 # Serve frontend files
-@app.get("/")
+@app.get("/", response_class=HTMLResponse)
 async def read_root():
-    return FileResponse(os.path.join(BASE_DIR, "frontend", "index.html"))
+    index_path = os.path.join(FRONTEND_DIR, "index.html")
+    if os.path.exists(index_path):
+        with open(index_path, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read())
+    return HTMLResponse(content="Welcome to MeetHere API")
 
 @app.get("/{filename:path}")
 async def serve_frontend(filename: str):
-    filepath = os.path.join(BASE_DIR, "frontend", filename)
+    filepath = os.path.join(FRONTEND_DIR, filename)
     if os.path.exists(filepath):
         return FileResponse(filepath)
-    return FileResponse(os.path.join(BASE_DIR, "frontend", "index.html"))
+    # Проверяем, может быть это статический файл
+    static_filepath = os.path.join(STATIC_DIR, filename)
+    if os.path.exists(static_filepath):
+        return FileResponse(static_filepath)
+    # Если файл не найден, возвращаем index.html для SPA
+    return await read_root()
 
 # Authentication routes
 @app.post("/token", response_model=Token)
