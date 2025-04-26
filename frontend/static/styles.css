@@ -198,28 +198,34 @@ img {
     transform: translateY(-2px);
 }
 
-/* Переключатель языка */
+/* Language Switcher */
 .language-switcher {
     display: flex;
-    gap: 5px;
     justify-content: center;
-    margin-top: 10px;
+    gap: 10px;
+    margin: 20px 0;
+    padding: 10px;
 }
 
-.language-switcher button {
-    padding: 5px 10px;
-    border: 1px solid #eee;
+.lang-btn {
     background: transparent;
+    border: 1px solid #ccc;
     border-radius: 4px;
+    padding: 5px 10px;
+    color: #666;
     cursor: pointer;
-    font-size: 14px;
-    color: var(--gray-color);
+    transition: all 0.3s ease;
 }
 
-.language-switcher button.active {
-    background-color: var(--primary-color);
+.lang-btn:hover {
+    background: #f0f0f0;
+    color: #333;
+}
+
+.lang-btn.active {
+    background: #007bff;
     color: white;
-    border-color: var(--primary-color);
+    border-color: #0056b3;
 }
 
 /* Секция героя */
