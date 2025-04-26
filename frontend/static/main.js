@@ -1,5 +1,9 @@
 // Ожидаем полной загрузки DOM перед выполнением скрипта
 document.addEventListener('DOMContentLoaded', function() {
+    // Инициализация роутера
+    const router = new Router();
+    router.init();
+
     // Обработка мобильного меню
     const mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
     const sidebar = document.querySelector('.sidebar');
