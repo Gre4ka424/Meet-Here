@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Depends, HTTPException, status
+from fastapi import FastAPI, Depends, HTTPException, status, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.security import OAuth2PasswordRequestForm
 from fastapi.staticfiles import StaticFiles
@@ -46,29 +46,41 @@ app.add_middleware(
 # Mount static files
 app.mount("/static", StaticFiles(directory=STATIC_DIR), name="static")
 
-# Serve frontend files
-@app.get("/", response_class=HTMLResponse)
-async def read_root():
+# List of SPA routes that should return index.html
+SPA_ROUTES = [
+    "/",
+    "/services",
+    "/our-work",
+    "/our-team",
+    "/price-list",
+    "/contact",
+    "/login",
+    "/register"
+]
+
+@app.get("/{full_path:path}")
+async def catch_all(request: Request, full_path: str):
+    # Check if it's an API route
+    if request.url.path.startswith("/api/"):
+        raise HTTPException(status_code=404, detail="API route not found")
+        
+    # Check if it's a static file
+    if full_path.startswith("static/"):
+        file_path = os.path.join(BASE_DIR, full_path)
+        if os.path.exists(file_path):
+            return FileResponse(file_path)
+        raise HTTPException(status_code=404, detail="Static file not found")
+    
+    # For SPA routes or unknown paths, return index.html
     index_path = os.path.join(FRONTEND_DIR, "index.html")
     if os.path.exists(index_path):
         with open(index_path, "r", encoding="utf-8") as f:
-            return HTMLResponse(content=f.read())
+            content = f.read()
+            return HTMLResponse(content=content)
     return HTMLResponse(content="Welcome to MeetHere API")
 
-@app.get("/{filename:path}")
-async def serve_frontend(filename: str):
-    filepath = os.path.join(FRONTEND_DIR, filename)
-    if os.path.exists(filepath):
-        return FileResponse(filepath)
-    # Проверяем, может быть это статический файл
-    static_filepath = os.path.join(STATIC_DIR, filename)
-    if os.path.exists(static_filepath):
-        return FileResponse(static_filepath)
-    # Если файл не найден, возвращаем index.html для SPA
-    return await read_root()
-
-# Authentication routes
-@app.post("/token", response_model=Token)
+# API routes
+@app.post("/api/token", response_model=Token)
 async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(), db: Session = Depends(get_db)):
     user = authenticate_user(db, form_data.username, form_data.password)
     if not user:
@@ -83,7 +95,7 @@ async def login_for_access_token(form_data: OAuth2PasswordRequestForm = Depends(
     )
     return {"access_token": access_token, "token_type": "bearer"}
 
-@app.post("/login", response_model=Token)
+@app.post("/api/login", response_model=Token)
 async def login(user_data: UserLogin, db: Session = Depends(get_db)):
     user = authenticate_user(db, user_data.username, user_data.password)
     if not user:
