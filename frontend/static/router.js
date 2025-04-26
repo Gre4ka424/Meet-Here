@@ -32,7 +32,7 @@ class Router {
             document.querySelector('main.main-content').innerHTML = content;
             
             // Update active link in navigation
-            document.querySelectorAll('.main-nav a').forEach(link => {
+            document.querySelectorAll('.sidebar-nav a').forEach(link => {
                 link.classList.toggle('active', link.pathname === path);
             });
         } catch (error) {
@@ -87,7 +87,7 @@ const routes = {
     `,
     '/services': async () => `
         <section class="page-content">
-            <h1>Our Services</h1>
+            <h1>Наши услуги</h1>
             <div class="services-grid">
                 <div class="service-card">
                     <h3>Event Planning</h3>
@@ -104,52 +104,52 @@ const routes = {
             </div>
         </section>
     `,
-    '/our-work': async () => `
+    '/portfolio': async () => `
         <section class="page-content">
-            <h1>Our Work</h1>
-            <p>Check out some of our successful projects and events.</p>
+            <h1>Наши работы</h1>
+            <p>Ознакомьтесь с нашими успешными проектами и мероприятиями.</p>
         </section>
     `,
-    '/our-team': async () => `
+    '/team': async () => `
         <section class="page-content">
-            <h1>Our Team</h1>
-            <p>Meet the amazing people behind MeetHere.</p>
+            <h1>Наша команда</h1>
+            <p>Познакомьтесь с удивительными людьми, стоящими за MeetHere.</p>
         </section>
     `,
-    '/price-list': async () => `
+    '/prices': async () => `
         <section class="page-content">
-            <h1>Price List</h1>
-            <p>Explore our competitive pricing options.</p>
+            <h1>Прайс-лист</h1>
+            <p>Изучите наши конкурентные ценовые предложения.</p>
         </section>
     `,
     '/contact': async () => `
         <section class="page-content">
-            <h1>Contact Us</h1>
-            <p>Get in touch with our team.</p>
+            <h1>Контакты</h1>
+            <p>Свяжитесь с нашей командой.</p>
         </section>
     `,
     '/login': async () => `
         <section class="auth-section">
-            <h1>Login</h1>
+            <h1>Вход</h1>
             <form class="auth-form" id="loginForm">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Имя пользователя</label>
                     <input type="text" id="username" name="username" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Пароль</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Login</button>
+                <button type="submit" class="btn btn-primary">Войти</button>
             </form>
         </section>
     `,
     '/register': async () => `
         <section class="auth-section">
-            <h1>Register</h1>
+            <h1>Регистрация</h1>
             <form class="auth-form" id="registerForm">
                 <div class="form-group">
-                    <label for="username">Username</label>
+                    <label for="username">Имя пользователя</label>
                     <input type="text" id="username" name="username" required>
                 </div>
                 <div class="form-group">
@@ -157,10 +157,10 @@ const routes = {
                     <input type="email" id="email" name="email" required>
                 </div>
                 <div class="form-group">
-                    <label for="password">Password</label>
+                    <label for="password">Пароль</label>
                     <input type="password" id="password" name="password" required>
                 </div>
-                <button type="submit" class="btn btn-primary">Register</button>
+                <button type="submit" class="btn btn-primary">Зарегистрироваться</button>
             </form>
         </section>
     `
