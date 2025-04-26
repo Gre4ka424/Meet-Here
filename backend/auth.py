@@ -7,9 +7,9 @@ from jose import JWTError, jwt
 from passlib.context import CryptContext
 from sqlalchemy.orm import Session
 
-from database import get_db
-from models import UserDB
-from schemas import TokenData
+from backend.database import get_db
+from backend.models import UserDB
+from backend.schemas import TokenData
 
 # JWT Configuration
 SECRET_KEY = "YOUR_SECRET_KEY_HERE"  # Change this in production!
