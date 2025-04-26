@@ -17,4 +17,4 @@ ENV HOST=0.0.0.0
 EXPOSE $PORT
 
 # Команда для запуска приложения
-CMD cd backend && uvicorn main:app --host $HOST --port $PORT --reload
+CMD uvicorn backend.main:app --host $HOST --port $PORT --reload
