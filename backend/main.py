@@ -5,14 +5,15 @@ from fastapi.staticfiles import StaticFiles
 from fastapi.responses import FileResponse
 from sqlalchemy.orm import Session
 import os
+import sys
 from datetime import timedelta
 from pathlib import Path
 
-from .database import get_db, engine
-from .models import Base, UserDB
-from .schemas import UserCreate, User, Token, UserLogin
-from .auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
-
+sys.path.append(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+from backend.database import get_db, engine
+from backend.models import Base, UserDB
+from backend.schemas import UserCreate, User, Token, UserLogin
+from backend.auth import authenticate_user, create_access_token, get_current_active_user, get_password_hash, ACCESS_TOKEN_EXPIRE_MINUTES
 # Create tables
 Base.metadata.create_all(bind=engine)
 
